@@ -1,0 +1,337 @@
+<template>
+    <header class="showcase">
+
+        <div class="logo">
+            <img src="@/assets/images/logo1.png">
+        </div>
+
+        <div class="showcase-content">
+            <div class="formm">
+                <form id="formLogin" @submit.prevent="login">
+                    <h1>Log In</h1>
+                    <div class="info">
+                        <input class="email" type="email" name="email" placeholder="Email or phone number"
+                            style="color: white;"> <br>
+                        <input class="email" type="password" name="password" placeholder="Password"
+                            style="color: white;">
+                    </div>
+                    <div class="btn">
+                        <button class="btn-primary" type="submit">Log In</button>
+                    </div>
+                    <div class="help">
+                        <div>
+                            <input value="true" type="checkbox"><label>Remember me</label>
+                        </div>
+                        <a href="https://www.netflix.com/dz-en/LoginHelp">Need Help ?</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="fcbk">
+                <a href="https://facebook.com">
+                    <img src="https://i.ibb.co/LrVMXNR/social-fb.png" alt="Facebook">
+                </a>
+                <p>Login with Facebook</p>
+            </div>
+
+            <div class="signup">
+                <p>New to Netflix ?</p>
+                <router-link to="/signin" exact>
+                    Sign In now
+                </router-link>
+            </div>
+        </div>
+    </header>
+</template>
+
+<script>
+import axios from 'axios'
+import Vue from 'vue';
+
+export default {
+    name: "LoginView",
+    methods: {
+        login() {
+
+            const formLogin = document.getElementById('formLogin');
+            let formData = new FormData(formLogin);
+
+            axios.post('login', formData)
+                .then((r) => {
+                    localStorage.setItem('token', r.data.authorisation.token)
+                    this.$router.push('/')
+                })
+                .catch((e) => {
+                    Vue.swal(
+                        'Oops...',
+                        `${e.response.data.errors.email} \n ${e.response.data.errors.password}`,
+                        'error',
+                    );
+                })
+        }
+    },
+    created() {
+        let token = localStorage.getItem('token');
+
+        if (token)
+            this.$router.push('/');
+    }
+}
+</script>
+
+<style scoped>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #000;
+    color: #999;
+}
+
+ul {
+    list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: #fff;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+}
+
+p {
+    margin: 0.5rem 0;
+}
+
+img {
+    width: 100%;
+}
+
+.showcase {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    background: url("../../assets/images/uploads/error-bg.jpg") no-repeat center center/cover;
+}
+
+.showcase::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.65);
+    box-shadow: inset 30px 10px 150px #000000;
+}
+
+.logo {
+    position: relative;
+    z-index: 2;
+    height: 90px;
+}
+
+.logo img {
+    width: 160px;
+    height: 50px;
+    position: absolute;
+    top: 20px;
+    left: 40px;
+}
+
+.showcase-content {
+    position: relative;
+    z-index: 2;
+    width: 450px;
+    height: 500px;
+    background: rgb(0, 0, 0, 0.65);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+    border-radius: 15px;
+    padding: 35px 65px;
+}
+
+.formm h1 {
+    margin-bottom: 20px;
+}
+
+.formm {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.formm .info {
+    padding: 5px 0;
+    /* margin-bottom: 20px; */
+}
+
+.formm .info .email {
+    margin-bottom: 30px;
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+    font-size: inherit;
+}
+
+.formm .btn {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.btn-primary {
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    background: #dd003f;
+    color: #fff;
+    font-size: inherit;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.help {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+}
+
+.help a {
+    color: #999;
+}
+
+.help a:hover {
+    text-decoration: underline;
+}
+
+/* ------ input ------- */
+
+input[type=checkbox] {
+    background: #737373;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    border: 0;
+    height: 16px;
+    left: -20px;
+    width: 16px;
+    margin-right: 5px;
+}
+
+input[type=email] {
+    background: #343434;
+}
+
+input[type=password] {
+    background: #343434;
+}
+
+/* ------ input end ------- */
+
+.fcbk {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 0.8em;
+}
+
+.fcbk img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.signup {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.signup p {
+    margin-right: 5px;
+}
+
+.more {
+    font-size: 0.8em;
+    line-height: 1.1em;
+}
+
+.more a {
+    color: rgb(17, 108, 228);
+}
+
+.more a:hover,
+.signup a:hover {
+    text-decoration: underline;
+}
+
+/* ------ FOOTER ------- */
+
+footer {
+    position: absolute;
+    margin-top: 50px;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.65);
+    width: 100%;
+    height: 200px;
+}
+
+.ftr-content {
+    margin-left: 10%;
+    padding-top: 20px;
+    font-size: 1em;
+}
+
+.ftr-content a {
+    color: #999;
+}
+
+.ftr-content a:hover {
+    text-decoration: underline;
+}
+
+.contact {
+    margin-bottom: 30px;
+}
+
+.contact a:hover {
+    text-decoration: underline;
+}
+
+.ftr {
+    margin-bottom: 30px;
+    width: 70%;
+    font-size: 0.8em;
+    display: flex;
+    justify-content: space-between;
+}
+
+.select select {
+    width: 100px;
+    height: 40px;
+    border: none;
+    font-size: inherit;
+    padding-left: 10px;
+    background: #333333;
+}
+</style>
